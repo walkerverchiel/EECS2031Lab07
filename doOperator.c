@@ -65,7 +65,8 @@ static int popInt(struct tokenStack *s)
 { 
   int i;
   struct lexToken *t = popTokenStack(s);
-  i = atoi(t->symbol);                /*conver char[] to int*/
+  i = atoi(t->symbol);
+  freeToken(t);
   return i;
 }
 
@@ -73,8 +74,8 @@ static int popInt(struct tokenStack *s)
 static void pushInt(struct tokenStack *s, int v)
 {
   struct lexToken *t = allocToken();  /*build new lexToken*/
-  t->kind = LEX_TOKEN_NUMBER;        /*define the indentifier*/
-  sprintf(t->symbol,"%d",v);         /*conver int to char[]*/
+  t->kind = LEX_TOKEN_NUMBER;        
+  sprintf(t->symbol,"%d",v);
   pushTokenStack(s, t);
 }
 
@@ -144,7 +145,14 @@ static int op_quo(struct tokenStack *stack)
   int v1, v2;
   v2 = popInt(stack);
   v1 = popInt(stack);
-  pushInt(stack, v1/v2);
+  if(v2 == 0)
+ {
+   printf("Can't devide a number by Zero!");
+ }
+ else
+ {
+   pushInt(stack, v1/v2);
+ }
   return(0);
 }
 
